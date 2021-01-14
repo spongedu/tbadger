@@ -32,13 +32,15 @@ func randStringRunes(n int) string {
 
 func main() {
 	BatchInsert()
-	scan()
+	scan10()
 }
 
 func insert1() {
 	opts := badger.DefaultOptions
 	opts.Dir = dir
 	opts.ValueDir = valueDir
+	opts.TableBuilderOptions.BlockSize = 1024
+	opts.TableBuilderOptions.MaxTableSize = 8 << 20 * 4
 	db, err := badger.Open(opts)
 	if err != nil {
 		log.Fatal(err)
@@ -83,10 +85,46 @@ func scan() {
 	defer db.Close()
 }
 
+func scan10() {
+	opts := badger.DefaultOptions
+	opts.Dir = dir
+	opts.ValueDir = valueDir
+	db, err := badger.Open(opts)
+	if err != nil {
+		log.Fatal(err)
+	}
+	i := 0
+	err = db.View(func(txn *badger.Txn) error {
+		opts := badger.DefaultIteratorOptions
+		it := txn.NewIterator(opts)
+		defer it.Close()
+		for it.Rewind(); it.Valid(); it.Next() {
+			item := it.Item()
+			k := item.Key()
+			v, err := item.Value()
+			if err != nil {
+				return err
+			}
+			fmt.Printf("key=%s, value=%s\n", k, v)
+			i += 1
+			if i > 10 {
+				break
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+}
+
 func BatchInsert() {
 	opts := badger.DefaultOptions
 	opts.Dir = dir
 	opts.ValueDir = valueDir
+	opts.TableBuilderOptions.BlockSize = 1024
+	opts.TableBuilderOptions.MaxTableSize = 8 << 20 * 4
 	db, err := badger.Open(opts)
 	if err != nil {
 		log.Fatal(err)
@@ -104,12 +142,12 @@ func BatchInsert() {
 			log.Fatal(err)
 		}
 		i += 1
-		if i > 10 {
+		if i > 10000000 {
 			break
 		}
-		//if i % 100 == 0{
+		if i % 10000 == 0{
 			log.Printf("%d keys already inserted\n", i)
-		//}
+		}
 	}
 	defer db.Close()
 }
