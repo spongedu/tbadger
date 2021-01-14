@@ -10,8 +10,10 @@ import (
 )
 
 const (
-	dir =  "/Users/felixxdu/test/tbadger/data"
-	valueDir = "/Users/felixxdu/test/tbadger/data/data"
+	dir = "/tmp/badger_test"
+	valueDir = "/tmp/badger_test"
+	//dir =  "/Users/felixxdu/test/tbadger_data"
+	//valueDir = "/Users/felixxdu/test/tbadger_data/data"
 )
 
 func init() {
@@ -96,19 +98,18 @@ func BatchInsert() {
 		err = db.Update(func(txn *badger.Txn) error {
 			key := fmt.Sprintf("%16d", i)
 			value := randStringRunes(64)
-			_ = txn.Set([]byte(key), []byte(value));
-			return nil
+			return txn.Set([]byte(key), []byte(value));
 		})
 		if err != nil {
 			log.Fatal(err)
 		}
 		i += 1
-		if i > 10000 {
+		if i > 10 {
 			break
 		}
-		if i % 1000 == 0{
+		//if i % 100 == 0{
 			log.Printf("%d keys already inserted\n", i)
-		}
+		//}
 	}
 	defer db.Close()
 }
