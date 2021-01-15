@@ -1,19 +1,18 @@
 package main
 
 import (
+	"encoding/binary"
 	"fmt"
 	"log"
 	"math/rand"
-	"os"
-	"runtime/pprof"
 	"time"
 
 	"github.com/pingcap/badger"
 )
 
 const (
-	dir = "/Users/felixxdu/pingcap/hackathon_2020/linear_20m"
-	valueDir = "/Users/felixxdu/pingcap/hackathon_2020/linear_20m"
+	dir = "/Users/felixxdu/pingcap/hackathon_2020/data/20m_8bk_64bv"
+	valueDir = "/Users/felixxdu/pingcap/hackathon_2020/data/20m_8bk_64bv"
 	//dir =  "/Users/felixxdu/test/tbadger_data"
 	//valueDir = "/Users/felixxdu/test/tbadger_data/data"
 )
@@ -225,12 +224,13 @@ func seqGet() {
 		log.Printf("COST %d\n", end.Sub(start).Microseconds())
 	}()
 
-	f, err := os. Create("cpu.prof")
-	pprof.StartCPUProfile(f)
-	defer pprof.StopCPUProfile()
+	// f, err := os. Create("cpu.prof")
+	// pprof.StartCPUProfile(f)
+	// defer pprof.StopCPUProfile()
 	j := 1
+	b := make([]byte, 8)
 	for {
-		i := 1
+		var i uint64 = 1
 		for {
 			err = db.View(func(txn *badger.Txn) error {
 				/*
@@ -245,8 +245,9 @@ func seqGet() {
 					fmt.Printf("11  =: %s\n", val)
 
 				*/
+				binary.BigEndian.PutUint64(b, i)
 
-				_, err := txn.Get([]byte(fmt.Sprintf("%16d", i)))
+				_, err := txn.Get(b)
 				if err != nil {
 					return err
 				}
