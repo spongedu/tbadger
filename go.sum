@@ -108,6 +108,8 @@ github.com/spongedu/badger v1.5.1-0.20210115031609-aa738cc2e56b h1:o3W/dlEBwGtT6
 github.com/spongedu/badger v1.5.1-0.20210115031609-aa738cc2e56b/go.mod h1:fYMIA+mIsBNtQAIV8feNiryt66m4YiMgFk399MmvJOk=
 github.com/spongedu/badger v1.5.1-0.20210115063358-04aca7d71d6e h1:YkxQVTsNDsAPZrUOSjJbuQC22aC3Tg01VIgUpTl5KTU=
 github.com/spongedu/badger v1.5.1-0.20210115063358-04aca7d71d6e/go.mod h1:fYMIA+mIsBNtQAIV8feNiryt66m4YiMgFk399MmvJOk=
+github.com/spongedu/badger v1.5.1-0.20210115064131-82a4232af707 h1:mnn1w3c2ZdXGjctNKdy+C/mW1zDVhDy1hEWH8ytjwf8=
+github.com/spongedu/badger v1.5.1-0.20210115064131-82a4232af707/go.mod h1:LyrqUOHZrUDf9oGi1yoz1+qw9ckSIhQb5eMa1acOLNQ=
 github.com/spongedu/badger v1.5.1-0.20210115064256-3b7333116124 h1:QqOjj4OiU9bKv1I87Hj8UiQYJIlEZ4dLrP99sFEqF9A=
 github.com/spongedu/badger v1.5.1-0.20210115064256-3b7333116124/go.mod h1:LyrqUOHZrUDf9oGi1yoz1+qw9ckSIhQb5eMa1acOLNQ=
 github.com/spongedu/badger v1.5.1-0.20210115064512-55cff25e921b h1:SL/E/P7NV80yjikAl4w5uiB5c88S9bM957t7aTHV0K0=
