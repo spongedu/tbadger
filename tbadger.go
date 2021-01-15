@@ -31,7 +31,7 @@ func randStringRunes(n int) string {
 }
 
 func main() {
-	BatchInsert()
+	seqGet()
 	//scan10()
 	//getT()
 }
@@ -207,3 +207,76 @@ func getT() {
 		log.Fatalf("FATAL: %s", err)
 	}
 }
+
+func seqGet() {
+	opts := badger.DefaultOptions
+	opts.Dir = dir
+	opts.ValueDir = valueDir
+	db, err := badger.Open(opts)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+	start := time.Now()
+	defer func() {
+		end := time.Now()
+		log.Printf("COST %d\n", end.Sub(start).Microseconds())
+	}()
+
+	j := 1
+	for {
+		i := 1
+		for {
+			err = db.View(func(txn *badger.Txn) error {
+				/*
+					item, err := txn.Get([]byte("11"))
+					if err != nil {
+						return err
+					}
+					val, err := item.Value()
+					if err != nil {
+						return err
+					}
+					fmt.Printf("11  =: %s\n", val)
+
+				*/
+
+				_, err := txn.Get([]byte(fmt.Sprintf("%16d", i)))
+				if err != nil {
+					return err
+				}
+				//, err = item.Value()
+				// if err != nil {
+				// 	return err
+				// }
+				//fmt.Printf("919  =: %s\n", val)
+				/*
+
+					item, err = txn.Get([]byte("9"))
+					if err != nil {
+						return err
+					}
+					val, err = item.Value()
+					if err != nil {
+						return err
+					}
+					fmt.Printf("9  =: %s\n", val)
+
+				*/
+				return nil
+			})
+			if err != nil {
+				log.Fatalf("FATAL: %s", err)
+			}
+			i += 1
+			if i > 20000000 {
+				break
+			}
+		}
+		j += 1
+		if j > 5 {
+			break
+		}
+	}
+}
+
