@@ -31,7 +31,7 @@ func randStringRunes(n int) string {
 }
 
 func main() {
-	BatchInsert()
+	//BatchInsert()
 	//scan10()
 	getT()
 }
@@ -164,6 +164,7 @@ func getT() {
 	}
 	defer db.Close()
 	err = db.View(func(txn *badger.Txn) error {
+		/*
 		item, err := txn.Get([]byte("11"))
 		if err != nil {
 			return err
@@ -174,16 +175,18 @@ func getT() {
 		}
 		fmt.Printf("11  =: %s\n", val)
 
-		item, err = txn.Get([]byte(fmt.Sprintf("%16d", 1)))
+		 */
+
+		item, err := txn.Get([]byte(fmt.Sprintf("%16d", 919)))
 		if err != nil {
 			return err
 		}
+		val, err := item.Value()
+		if err != nil {
+			return err
+		}
+		fmt.Printf("919  =: %s\n", val)
 		/*
-		val, err = item.Value()
-		if err != nil {
-			return err
-		}
-		fmt.Printf("3  =: %s\n", val)
 
 		item, err = txn.Get([]byte("9"))
 		if err != nil {
