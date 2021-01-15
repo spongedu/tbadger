@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"encoding/binary"
 	"fmt"
 	"log"
 	"math/rand"
@@ -10,8 +12,8 @@ import (
 )
 
 const (
-	dir = "/Users/felixxdu/pingcap/hackathon_2020/linear_20m"
-	valueDir = "/Users/felixxdu/pingcap/hackathon_2020/linear_20m"
+	dir = "/Users/felixxdu/pingcap/hackathon_2020/data/20m_8bk_64bv"
+	valueDir = "/Users/felixxdu/pingcap/hackathon_2020/data/20m_8bk_64bv"
 	//dir =  "/Users/felixxdu/test/tbadger_data"
 	//valueDir = "/Users/felixxdu/test/tbadger_data/data"
 )
@@ -34,6 +36,7 @@ func main() {
 	BatchInsert()
 	//scan10()
 	//getT()
+	//t()
 }
 
 func insert1() {
@@ -124,7 +127,7 @@ func BatchInsert() {
 	opts := badger.DefaultOptions
 	opts.Dir = dir
 	opts.ValueDir = valueDir
-	opts.TableBuilderOptions.BlockSize = 1024
+	opts.TableBuilderOptions.BlockSize = 512
 	opts.TableBuilderOptions.MaxTableSize = 8 << 20 * 4
 	opts.LevelOneSize = 128 << 20
 	opts.TableBuilderOptions.LevelSizeMultiplier = 2
@@ -133,14 +136,16 @@ func BatchInsert() {
 		log.Fatal(err)
 	}
 
-	i := 1
+	var i uint64 = 1
 
 	for {
 		err = db.Update(func(txn *badger.Txn) error {
-			key := fmt.Sprintf("%16d", i)
+			key := make([]byte, 8)
+			binary.BigEndian.PutUint64(key, i)
+
 			value := randStringRunes(64)
-			fmt.Printf("%s|%s\n", key, value)
-			return txn.Set([]byte(key), []byte(value));
+			//fmt.Printf("%d|%s\n", i, value)
+			return txn.Set(key, []byte(value));
 		})
 		if err != nil {
 			log.Fatal(err)
@@ -178,8 +183,11 @@ func getT() {
 		fmt.Printf("11  =: %s\n", val)
 
 		 */
+		key := make([]byte, 8)
+		binary.BigEndian.PutUint64(key, 12345)
 
-		item, err := txn.Get([]byte(fmt.Sprintf("%16d", 919)))
+
+		item, err := txn.Get(key)
 		if err != nil {
 			return err
 		}
@@ -187,10 +195,11 @@ func getT() {
 		if err != nil {
 			return err
 		}
-		fmt.Printf("919  =: %s\n", val)
-		/*
+		fmt.Printf("12345  =: %s\n", val)
 
-		item, err = txn.Get([]byte("9"))
+		binary.BigEndian.PutUint64(key, 110)
+
+		item, err = txn.Get(key)
 		if err != nil {
 			return err
 		}
@@ -198,12 +207,51 @@ func getT() {
 		if err != nil {
 			return err
 		}
-		fmt.Printf("9  =: %s\n", val)
+		fmt.Printf("110  =: %s\n", val)
 
-		 */
 		return nil
 	})
 	if err != nil {
 		log.Fatalf("FATAL: %s", err)
 	}
+}
+
+func t() {
+	i := uint64(1)
+
+	b := make([]byte, 8)
+	i = uint64(21)
+	binary.BigEndian.PutUint64(b, i)
+	fmt.Println(b[:])
+
+
+	bb := make([]byte, 8)
+	i = uint64(123456788)
+	binary.BigEndian.PutUint64(bb, i)
+	fmt.Println(bb[:])
+
+	fmt.Printf("byte21 > byte 123456788? %d\n", bytes.Compare(b, bb))
+
+	i = uint64(95)
+	binary.BigEndian.PutUint64(b, i)
+	fmt.Println(b[:])
+
+
+	i = uint64(100)
+	binary.LittleEndian.PutUint64(b, i)
+	fmt.Println(b[:])
+
+	i = uint64(1001)
+	binary.LittleEndian.PutUint64(b, i)
+	fmt.Println(b[:])
+
+	i = uint64(123456788)
+	binary.LittleEndian.PutUint64(b, i)
+	fmt.Println(b[:])
+
+	i = uint64(18446744073709551614)
+	binary.BigEndian.PutUint64(b, i)
+	fmt.Println(b[:])
+
+	i = uint64(binary.BigEndian.Uint64(b))
 }
