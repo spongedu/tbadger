@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/binary"
 	"fmt"
 	"log"
 	"math/rand"
@@ -10,8 +11,8 @@ import (
 )
 
 const (
-	dir = "/Users/felixxdu/pingcap/hackathon_2020/linear_20m"
-	valueDir = "/Users/felixxdu/pingcap/hackathon_2020/linear_20m"
+	dir = "/Users/felixxdu/pingcap/hackathon_2020/data/20m_8bk_64bv"
+	valueDir = "/Users/felixxdu/pingcap/hackathon_2020/data/20m_8bk_64bv"
 	//dir =  "/Users/felixxdu/test/tbadger_data"
 	//valueDir = "/Users/felixxdu/test/tbadger_data/data"
 )
@@ -224,8 +225,9 @@ func seqGet() {
 	}()
 
 	j := 1
+	b := make([]byte, 8)
 	for {
-		i := 1
+		var i uint64 = 1
 		for {
 			err = db.View(func(txn *badger.Txn) error {
 				/*
@@ -241,7 +243,9 @@ func seqGet() {
 
 				*/
 
-				_, err := txn.Get([]byte(fmt.Sprintf("%16d", i)))
+				binary.BigEndian.PutUint64(b, i)
+
+				_, err := txn.Get(b)
 				if err != nil {
 					return err
 				}
