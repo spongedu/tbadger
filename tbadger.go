@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"os"
+	"runtime/pprof"
 	"time"
 
 	"github.com/pingcap/badger"
@@ -222,6 +224,11 @@ func seqGet() {
 		end := time.Now()
 		log.Printf("COST %d\n", end.Sub(start).Microseconds())
 	}()
+
+
+	f, err := os.Create("cpu.prof")
+	pprof.StartCPUProfile(f)
+	defer pprof.StopCPUProfile()
 
 	j := 1
 	for {
