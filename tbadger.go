@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	dir = "/tmp/cbadger_test"
-	valueDir = "/tmp/cbadger_test"
+	dir = "/Users/felixxdu/pingcap/hackathon_2020/linear_20m"
+	valueDir = "/Users/felixxdu/pingcap/hackathon_2020/linear_20m"
 	//dir =  "/Users/felixxdu/test/tbadger_data"
 	//valueDir = "/Users/felixxdu/test/tbadger_data/data"
 )
@@ -31,9 +31,9 @@ func randStringRunes(n int) string {
 }
 
 func main() {
-	//BatchInsert()
+	BatchInsert()
 	//scan10()
-	getT()
+	//getT()
 }
 
 func insert1() {
@@ -126,6 +126,8 @@ func BatchInsert() {
 	opts.ValueDir = valueDir
 	opts.TableBuilderOptions.BlockSize = 1024
 	opts.TableBuilderOptions.MaxTableSize = 8 << 20 * 4
+	opts.LevelOneSize = 128 << 20
+	opts.TableBuilderOptions.LevelSizeMultiplier = 2
 	db, err := badger.Open(opts)
 	if err != nil {
 		log.Fatal(err)
@@ -144,7 +146,7 @@ func BatchInsert() {
 			log.Fatal(err)
 		}
 		i += 1
-		if i > 10000 {
+		if i > 20000000 {
 			break
 		}
 		if i % 10000 == 0{
