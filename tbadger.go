@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	dir = "/Users/felixxdu/pingcap/hackathon_2020/data/20m_8bk_64bv"
-	valueDir = "/Users/felixxdu/pingcap/hackathon_2020/data/20m_8bk_64bv"
+	dir = "/Users/felixxdu/pingcap/hackathon_2020/data/mph_20m_8bk_64bv"
+	valueDir = "/Users/felixxdu/pingcap/hackathon_2020/data/mph_20m_8bk_64bv"
 	//dir =  "/Users/felixxdu/test/tbadger_data"
 	//valueDir = "/Users/felixxdu/test/tbadger_data/data"
 )
@@ -127,8 +127,8 @@ func BatchInsert() {
 	opts := badger.DefaultOptions
 	opts.Dir = dir
 	opts.ValueDir = valueDir
-	opts.TableBuilderOptions.BlockSize = 512
-	opts.TableBuilderOptions.MaxTableSize = 8 << 20 * 4
+	//opts.TableBuilderOptions.BlockSize = 512
+	//opts.TableBuilderOptions.MaxTableSize = 8 << 20 * 4
 	opts.LevelOneSize = 128 << 20
 	opts.TableBuilderOptions.LevelSizeMultiplier = 2
 	db, err := badger.Open(opts)
