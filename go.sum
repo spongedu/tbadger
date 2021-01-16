@@ -115,6 +115,8 @@ github.com/spongedu/badger v1.5.1-0.20210115161219-97e570cb29f7 h1:gcOvqWXMs3gT5
 github.com/spongedu/badger v1.5.1-0.20210115161219-97e570cb29f7/go.mod h1:fYMIA+mIsBNtQAIV8feNiryt66m4YiMgFk399MmvJOk=
 github.com/spongedu/badger v1.5.1-0.20210116055423-039c1f10bd96 h1:Rc1IReP6Bz1bUL0E3D+pQT9vkw/V4DyznzbHngKedYo=
 github.com/spongedu/badger v1.5.1-0.20210116055423-039c1f10bd96/go.mod h1:qmNkbLEQ4hvPzv/wWSG2r0dJZHxB2Yit2jhhIu/FDiI=
+github.com/spongedu/badger v1.5.1-0.20210116120204-b945927748ea h1:MVzbdqp+zdw0ECqPFUIIDZmwCHWKNs/fVZmKMe5b3h8=
+github.com/spongedu/badger v1.5.1-0.20210116120204-b945927748ea/go.mod h1:fYMIA+mIsBNtQAIV8feNiryt66m4YiMgFk399MmvJOk=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
