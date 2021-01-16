@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	dir = "/Users/felixxdu/pingcap/hackathon_2020/data/mph_20m_8bk_64bv"
-	valueDir = "/Users/felixxdu/pingcap/hackathon_2020/data/mph_20m_8bk_64bv"
+	dir = "/Users/felixxdu/pingcap/hackathon_2020/data/mph_v2"
+	valueDir = "/Users/felixxdu/pingcap/hackathon_2020/data/mph_v2"
 	//dir =  "/Users/felixxdu/test/tbadger_data"
 	//valueDir = "/Users/felixxdu/test/tbadger_data/data"
 )
