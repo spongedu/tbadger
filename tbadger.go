@@ -218,67 +218,57 @@ func seqGet() {
 		log.Fatal(err)
 	}
 	defer db.Close()
-	start := time.Now()
-	defer func() {
-		end := time.Now()
-		log.Printf("COST %d\n", end.Sub(start).Microseconds())
-	}()
+	var start time.Time
+	var end time.Time
 
-	j := 1
-	b := make([]byte, 8)
+	// f, err := os. Create("cpu.prof")
+	// pprof.StartCPUProfile(f)
+	// defer pprof.StopCPUProfile()
+
+	bb := make([][]byte, 20000001, 20000001)
+	var t uint64 = 1
 	for {
-		var i uint64 = 1
+		b := make([]byte, 8)
+		binary.BigEndian.PutUint64(b, t)
+		bb[t] = b
+		t += 1
+		if t > 20000000 {
+			break
+		}
+	}
+	j := 1
+	k := 1
+	for {
+		start = time.Now()
 		for {
 			err = db.View(func(txn *badger.Txn) error {
-				/*
-					item, err := txn.Get([]byte("11"))
+				var i uint64 = 1
+				for {
+					_, err := txn.Get(bb[i])
 					if err != nil {
 						return err
 					}
-					val, err := item.Value()
-					if err != nil {
-						return err
+
+					i += 1
+					if i > 20000000 {
+						break
 					}
-					fmt.Printf("11  =: %s\n", val)
-
-				*/
-
-				binary.BigEndian.PutUint64(b, i)
-
-				_, err := txn.Get(b)
-				if err != nil {
-					return err
 				}
-				//, err = item.Value()
-				// if err != nil {
-				// 	return err
-				// }
-				//fmt.Printf("919  =: %s\n", val)
-				/*
-
-					item, err = txn.Get([]byte("9"))
-					if err != nil {
-						return err
-					}
-					val, err = item.Value()
-					if err != nil {
-						return err
-					}
-					fmt.Printf("9  =: %s\n", val)
-
-				*/
 				return nil
 			})
 			if err != nil {
 				log.Fatalf("FATAL: %s", err)
 			}
-			i += 1
-			if i > 20000000 {
+			j += 1
+			if j > 5 {
 				break
 			}
 		}
-		j += 1
-		if j > 5 {
+		end = time.Now()
+		log.Printf("ITER[%d] COST %d\n", k, end.Sub(start).Microseconds())
+		time.Sleep(2 * time.Second)
+		k += 1
+		if k > 5 {
 			break
 		}
 	}
