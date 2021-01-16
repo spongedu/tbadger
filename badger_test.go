@@ -2,20 +2,21 @@ package main
 
 import (
 	"encoding/binary"
+	"fmt"
 	"github.com/pingcap/badger"
 	"log"
 	"math/rand"
 	"testing"
 )
 
-func get(db *badger.DB, key uint32) bool {
+func get(db *badger.DB, key uint64) bool {
 	found := false
 	err := db.View(func(txn *badger.Txn) error {
-		bs := make([]byte, 4)
-		binary.BigEndian.PutUint32(bs, key)
+		bs := make([]byte, 8)
+		binary.BigEndian.PutUint64(bs, key)
 		_, err := txn.Get(bs)
 		if err != nil {
-			return err
+			return nil
 		}
 		return nil
 	})
@@ -25,6 +26,7 @@ func get(db *badger.DB, key uint32) bool {
 	} else {
 		// log.Printf("Got key: %d, value %d\n", key, binary.BigEndian.Uint32(value))
 	}
+	found = true
 	return found
 }
 
@@ -39,15 +41,15 @@ func BenchmarkBadger(b *testing.B) {
 	}
 	defer db.Close()
 
-	// nFound := 0
-	maxValPow1P2 := uint32(1000000)
+	 nFound := 0
+	maxValPow1P2 := uint64(2000000)
 	for n := 0; n < b.N; n++ {
-		key := rand.Uint32() % maxValPow1P2
-		get(db, key)
-		// if found {
-		// 	nFound ++
-		// }
+		key := rand.Uint64() % maxValPow1P2
+		found := get(db, key)
+		if found {
+			nFound ++
+		}
 	}
-	// fmt.Printf("-------> Hit rate: %f\n", float64(nFound) / float64(b.N))
+	fmt.Printf("-------> Hit rate: %f\n", float64(nFound) / float64(b.N))
 }
 
