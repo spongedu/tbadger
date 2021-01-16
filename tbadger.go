@@ -5,14 +5,16 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"runtime/pprof"
+	"os"
 	"time"
 
 	"github.com/pingcap/badger"
 )
 
 const (
-	dir = "/Users/felixxdu/pingcap/hackathon_2020/data/20m_8bk_64bv"
-	valueDir = "/Users/felixxdu/pingcap/hackathon_2020/data/20m_8bk_64bv"
+	dir = "/Users/felixxdu/pingcap/hackathon_2020/data/mph_20m_8bk_64bv"
+	valueDir = "/Users/felixxdu/pingcap/hackathon_2020/data/mph_20m_8bk_64bv"
 	//dir =  "/Users/felixxdu/test/tbadger_data"
 	//valueDir = "/Users/felixxdu/test/tbadger_data/data"
 )
@@ -221,9 +223,9 @@ func seqGet() {
 	var start time.Time
 	var end time.Time
 
-	// f, err := os. Create("cpu.prof")
-	// pprof.StartCPUProfile(f)
-	// defer pprof.StopCPUProfile()
+	f, err := os. Create("cpu.prof")
+	pprof.StartCPUProfile(f)
+	defer pprof.StopCPUProfile()
 
 	bb := make([][]byte, 20000001, 20000001)
 	var t uint64 = 1
