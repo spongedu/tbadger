@@ -86,7 +86,7 @@ func BatchInsert() {
 			log.Fatal(err)
 		}
 		i += 1
-		if i > 2000000 {
+		if i > 200000 {
 			break
 		}
 		if i % 10000 == 0{
