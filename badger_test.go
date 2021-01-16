@@ -30,16 +30,25 @@ func get(db *badger.DB, key uint64) bool {
 	return found
 }
 
+var (
+	db *badger.DB
+	err error
+)
 
-func BenchmarkBadger(b *testing.B) {
+func init() {
 	opts := badger.DefaultOptions
 	opts.Dir = dir
 	opts.ValueDir = valueDir
-	db, err := badger.Open(opts)
+	db, err = badger.Open(opts)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+	for n := 0; n < 2000000; n++ {
+		get(db, uint64(n))
+	}
+}
+
+func BenchmarkBadger(b *testing.B) {
 
 	 nFound := 0
 	maxValPow1P2 := uint64(2000000)
